@@ -73,6 +73,9 @@ dispatch_async(concurrentQueue, ^{
         });
     });
 ```
+<br></br>
+For more detail, you can see the website:  
+https://www.raywenderlich.com/60749/grand-central-dispatch-in-depth-part-1
 
 
  
