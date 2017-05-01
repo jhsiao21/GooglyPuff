@@ -44,18 +44,16 @@ When the system context switch back to Thread-A, you’ll then allocate another 
 At that point you have two instances of a singleton.
 ```
 ```code
-原作者用[NSThread sleepForTimeInterval:]來解決同時可能有Thread-A和Thread-B進入if條件後的情況，如下程式；
+可以用dispatch_once來設計Singleton，能解決同時可能有Thread-A和Thread-B進入if條件後產生兩個instance的情況，如下程式；
 
 + (instancetype)sharedManager
 {
     static PhotoManager *sharedPhotoManager = nil;
-    if (!sharedPhotoManager) {
-        [NSThread sleepForTimeInterval:2];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         sharedPhotoManager = [[PhotoManager alloc] init];
-        NSLog(@"Singleton has memory address at: %@", sharedPhotoManager);
-        [NSThread sleepForTimeInterval:2];
         sharedPhotoManager->_photosArray = [NSMutableArray array];
-    }
+    });
     return sharedPhotoManager;
 }
 ```
