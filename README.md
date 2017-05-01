@@ -24,7 +24,26 @@ dispatch_sync(dispatch_get_main_queue(), ^{
   [someObject doSomething];
 });
 ```
+* **Race Condition**: 在設計Singleton模式時，可能會犯的一種錯誤情況，如下程式；
+```code
++ (instancetype)sharedManager
+{
+    static PhotoManager *sharedPhotoManager = nil;
+    if (!sharedPhotoManager) {
+        sharedPhotoManager = [[PhotoManager alloc] init];
+        sharedPhotoManager->_photosArray = [NSMutableArray array];
+    }
+    return sharedPhotoManager;
+}
 
+The if condition branch is not thread safe; 
+if you invoke the method multiple times, there’s a possibility that one thread(called Thread-A) could enter the if block and a context switch could occur before sharePhotoManager is allocated. 
+Then another thread(Thread-B) could enter the if, allocate an instance of the singleton, then exit.  
+
+When the system context switch back to Thread-A, you’ll then allocate another instance of the singleton, then exit.  
+At that point you have two instances of a singleton.
+```
+   
 * **Deadlock**: Two(or sometimes more) items — in most cases, threads—are said to be deadlocked if they all get stuck waiting for each other to complete or perform another action. 
 e.g, The first thread can’t finish because it’s waiting for the second thread to finish.But the second thread can’t finish because it’s waiting for the first to finish.
 <br></br>
