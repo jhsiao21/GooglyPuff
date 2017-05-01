@@ -25,6 +25,17 @@ dispatch_sync(dispatch_get_main_queue(), ^{
   [someObject doSomething];
 });
 ```  
+
+* **Critical Section**: This is a piece of code that must **not be executed concurrently**, that is, from two threads at once. This is usually because the code manipulates a shared resource such as a variable that can become corrupt if it’s accessed by concur- rent processes.
+```code
+dispatch_once() executes a block once and only once in a thread safe manner. 
+Different threads that try to access the critical section — the code passed to dispatch_once — while a thread is already in this section are blocked until the critical section completes.
+```  
+* **Deadlock**: Two(or sometimes more) items — in most cases, threads—are said to be deadlocked if they all get stuck waiting for each other to complete or perform another action. 
+e.g, The first thread can’t finish because it’s waiting for the second thread to finish.But the second thread can’t finish because it’s waiting for the first to finish.
+
+* **Thread Safe**: Thread safe code can be safely called from multiple threads or concurrent tasks without causing any problems (data corruption, crashing, etc). Code that is not thread safe must only be run in one context at a time. An example of thread safe code is NSDictionary. You can use it from multiple threads at the same time without issue. On the other hand, NSMutableDictionary is not thread safe and should only be accessed from one thread at a time.
+
 * **Race Condition**: 在設計Singleton模式時，可能會犯的一種錯誤情況，如下程式；
 ```code
 + (instancetype)sharedManager
@@ -59,13 +70,6 @@ At that point you have two instances of a singleton.
     return sharedPhotoManager;
 }
 ```  
-* **Critical Section**: This is a piece of code that must **not be executed concurrently**, that is, from two threads at once. This is usually because the code manipulates a shared resource such as a variable that can become corrupt if it’s accessed by concur- rent processes.
-```code
-dispatch_once() executes a block once and only once in a thread safe manner. 
-Different threads that try to access the critical section — the code passed to dispatch_once — while a thread is already in this section are blocked until the critical section completes.
-```  
-* **Deadlock**: Two(or sometimes more) items — in most cases, threads—are said to be deadlocked if they all get stuck waiting for each other to complete or perform another action. 
-e.g, The first thread can’t finish because it’s waiting for the second thread to finish.But the second thread can’t finish because it’s waiting for the first to finish.
 
 * **Readers–writers problem**: In computer science, the readers-writers problems are examples of a common computing problem in concurrency. There are at least three variations of the problems, which deal with situations in which many threads try to access the same shared resource at one time. Some threads may read and some may write, with the constraint that no process may access the shared resource for either reading or writing while another process is in the act of writing to it. **GCD provides an elegant solution of creating a Readers-writer lock using dispatch barriers.**
 
