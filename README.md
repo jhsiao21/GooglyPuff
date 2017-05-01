@@ -44,7 +44,8 @@ When the system context switch back to Thread-A, you’ll then allocate another 
 At that point you have two instances of a singleton.
 ```
 ```code
-可以用dispatch_once來設計Singleton，能解決同時可能有Thread-A和Thread-B進入if條件後產生兩個instance的情況，如下程式；
+可以用dispatch_once來設計Singleton，dispatch_once保證某個block只會被執行一次．
+能有效解決同時可能有Thread-A和Thread-B進入if條件後產生兩個instance的情況，如下程式；
 
 + (instancetype)sharedManager
 {
