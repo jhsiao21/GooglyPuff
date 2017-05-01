@@ -1,5 +1,6 @@
 # GooglyPuff
-這是一個講解**Grand Centeral Dispatch**的Tutorial實作，順便整理GCD的一些重點(中英夾雜)．
+這是一個講解**Grand Centeral Dispatch**的<a href="https://www.raywenderlich.com/60749/grand-central-dispatch-in-depth-part-1">Tutorial</a>，裡面提到的點都蠻細的，像是在多執行緒下所產生問題，如<a href="https://en.wikipedia.org/wiki/Readers–writers_problem">Readers–writers problem</a>或<a href="https://zh.wikipedia.org/wiki/競爭危害">race condition</a>等等，總之這是一個中英夾雜的GCD重點整理．
+
 <br></br>
 ## **What is GCD?**  
 * GCD can improve your app’s responsiveness by helping you defer computationally expensive task and run them in the background.  
@@ -65,6 +66,9 @@ Different threads that try to access the critical section — the code passed to
 ```  
 * **Deadlock**: Two(or sometimes more) items — in most cases, threads—are said to be deadlocked if they all get stuck waiting for each other to complete or perform another action. 
 e.g, The first thread can’t finish because it’s waiting for the second thread to finish.But the second thread can’t finish because it’s waiting for the first to finish.
+
+* **Readers–writers problem**: In computer science, the readers-writers problems are examples of a common computing problem in concurrency. There are at least three variations of the problems, which deal with situations in which many threads try to access the same shared resource at one time. Some threads may read and some may write, with the constraint that no process may access the shared resource for either reading or writing while another process is in the act of writing to it. **GCD provides an elegant solution of creating a Readers-writer lock using dispatch barriers.**
+
 <br></br>
 ## **Concurrency vs Parallelism**
 Concurrency and parallelism are often mentioned together. Multi-core devices execute multiple threads at the same time via parallelism;
