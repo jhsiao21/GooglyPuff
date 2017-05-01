@@ -23,7 +23,7 @@
 dispatch_sync(dispatch_get_main_queue(), ^{
   [someObject doSomething];
 });
-```
+```  
 * **Race Condition**: 在設計Singleton模式時，可能會犯的一種錯誤情況，如下程式；
 ```code
 + (instancetype)sharedManager
@@ -57,7 +57,12 @@ At that point you have two instances of a singleton.
     });
     return sharedPhotoManager;
 }
-```
+```  
+* **Critical Section**: This is a piece of code that must **not be executed concurrently**, that is, from two threads at once. This is usually because the code manipulates a shared resource such as a variable that can become corrupt if it’s accessed by concur- rent processes.
+```code
+dispatch_once() executes a block once and only once in a thread safe manner. 
+Different threads that try to access the critical section — the code passed to dispatch_once — while a thread is already in this section are blocked until the critical section completes.
+```  
 * **Deadlock**: Two(or sometimes more) items — in most cases, threads—are said to be deadlocked if they all get stuck waiting for each other to complete or perform another action. 
 e.g, The first thread can’t finish because it’s waiting for the second thread to finish.But the second thread can’t finish because it’s waiting for the first to finish.
 <br></br>
