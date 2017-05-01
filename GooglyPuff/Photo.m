@@ -56,10 +56,13 @@
 {
     static NSURLSession *session;
     static dispatch_once_t onceToken;
+    
+    //dispatch_once保證某個block只會被執行一次，防止race condition
     dispatch_once(&onceToken, ^{
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         session = [NSURLSession sessionWithConfiguration:configuration];
     });
+    
     NSURLSessionDataTask *task = [session dataTaskWithURL:self.url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         self.image = [UIImage imageWithData:data];
         if (!error && _image) {
@@ -69,15 +72,24 @@
         }
         
         self.thumbnail = [_image thumbnailImage:64
-                          transparentBorder:0
-                               cornerRadius:0
-                       interpolationQuality:kCGInterpolationDefault];
+                              transparentBorder:0
+                                   cornerRadius:0
+                           interpolationQuality:kCGInterpolationDefault];
         
         if (completionBlock) {
             completionBlock(_image, error);
         }
+        
+        //習慣上，大多數的notification都會在main thread送出
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+            //Returns a notification object with a specified name, object, and user information
             NSNotification *notification = [NSNotification notificationWithName:kPhotoManagerContentUpdateNotification object:nil];
+            
+            //原本notification發送通知的寫法：
+            //[[NSNotificationCenter defaultCenter] postNotification:notification];
+            
+            //使用NSNotificationQueue將一些通知合併(可能是同個名稱CoalescingOnName或發送者CoalescingOnSender)合併成一次通知發送
             [[NSNotificationQueue defaultQueue] enqueueNotification:notification postingStyle:NSPostASAP coalesceMask:NSNotificationCoalescingOnName forModes:nil];
         });
     }];
