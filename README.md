@@ -115,6 +115,15 @@ dispatch_async(concurrentQueue, ^{
         });
     });
 ```
+
+* **dispatch_barrier** : barrier就像是serial queue與global queue的合體，可以解決Readers–writers problem!
+<div align="center">
+  <img src="https://github.com/jhsiao21/GooglyPuff/blob/master/dispatch_barrier.jpg"> 
+</div>
+```explan
+Notice how in normal operation the queue acts just like a normal concurrent queue. But when the barrier is execut- ing, it essentially acts like a serial queue. That is, the barrier is the only thing executing. After the barrier finishes, the queue goes back to being a normal concurrent queue.
+```
+
 <br></br>
 For more detail, you can see the website:  
 https://www.raywenderlich.com/60749/grand-central-dispatch-in-depth-part-1
