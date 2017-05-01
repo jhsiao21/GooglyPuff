@@ -87,7 +87,7 @@ GCD provides dispatch queues to handle blocks of code, these queues manage the t
 * **Serial queues** : Serial queues is one of the kind of dispatch queues that GCD provides. Tasks in serial execute one at a time, each task starting only after the preceding task has finished.
 ```short explan
 如果我們想讓好幾件工作(Block)都在背景執行，而每件工作並非平行執行，而是一件工作做完之後，再繼續下一件工作，便可使用Serial queue.
-``````
+```
 <div align="center">
   <img src="https://github.com/jhsiao21/GooglyPuff/blob/master/serialqueue.jpg"> 
 </div>
@@ -96,6 +96,12 @@ GCD provides dispatch queues to handle blocks of code, these queues manage the t
 * **Concurrent queues** : Tasks in concurrent queues are guarantee to start in the order they were added.
 <div align="center">
   <img src="https://github.com/jhsiao21/GooglyPuff/blob/master/concurrent.jpg"> 
+</div>
+
+* **Barrier** : barrier就像是serial queue與concurrent queue的合體，可以解決Readers–writers problem!
+Notice how in normal operation the queue acts just like a normal concurrent queue. But when the barrier is executing, it essentially acts like a serial queue. That is, the barrier is the only thing executing. After the barrier finishes, the queue goes back to being a normal concurrent queue.
+<div align="center">
+  <img src="https://github.com/jhsiao21/GooglyPuff/blob/master/dispatch_barrier.jpg"> 
 </div>
 
 ## **Queue Types**
@@ -118,14 +124,6 @@ dispatch_async(concurrentQueue, ^{
             [someObject doSomethingOnMainThread]; //update UI
         });
     });
-```
-
-* **dispatch_barrier** : barrier就像是serial queue與global queue的合體，可以解決Readers–writers problem!
-<div align="center">
-  <img src="https://github.com/jhsiao21/GooglyPuff/blob/master/dispatch_barrier.jpg"> 
-</div>
-```explan
-Notice how in normal operation the queue acts just like a normal concurrent queue. But when the barrier is execut- ing, it essentially acts like a serial queue. That is, the barrier is the only thing executing. After the barrier finishes, the queue goes back to being a normal concurrent queue.
 ```
 
 <br></br>
