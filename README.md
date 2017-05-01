@@ -43,7 +43,22 @@ Then another thread(Thread-B) could enter the if, allocate an instance of the si
 When the system context switch back to Thread-A, you’ll then allocate another instance of the singleton, then exit.  
 At that point you have two instances of a singleton.
 ```
-   
+```code
+原作者用[NSThread sleepForTimeInterval:]來解決同時可能有Thread-A和Thread-B進入if條件後的情況，如下程式；
+
++ (instancetype)sharedManager
+{
+    static PhotoManager *sharedPhotoManager = nil;
+    if (!sharedPhotoManager) {
+        [NSThread sleepForTimeInterval:2];
+        sharedPhotoManager = [[PhotoManager alloc] init];
+        NSLog(@"Singleton has memory address at: %@", sharedPhotoManager);
+        [NSThread sleepForTimeInterval:2];
+        sharedPhotoManager->_photosArray = [NSMutableArray array];
+    }
+    return sharedPhotoManager;
+}
+```
 * **Deadlock**: Two(or sometimes more) items — in most cases, threads—are said to be deadlocked if they all get stuck waiting for each other to complete or perform another action. 
 e.g, The first thread can’t finish because it’s waiting for the second thread to finish.But the second thread can’t finish because it’s waiting for the first to finish.
 <br></br>
